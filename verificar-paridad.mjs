@@ -82,6 +82,16 @@ function hashRemoto(rutas) {
   return out;
 }
 
+/** Los ficheros del plugin (en el repo estan en plugin/, y en el perfil instalado en node_modules). */
+const FICHEROS_PLUGIN = [
+  "plugin/lib/index.js",
+  "plugin/lib/canal.js",
+  "plugin/lib/herramientas.js",
+  "plugin/lib/perfil.js",
+  "plugin/lib/wip.js",
+  "lib/index.js",
+];
+
 /** Los ficheros que forman un perfil (los mismos en los tres sitios). */
 function ficherosDelPerfil(nombre) {
   const base = path.join(opc.repo, "perfiles", nombre);
@@ -129,7 +139,7 @@ if (opc.conRemoto) console.log("  remoto:  " + opc.remoto + ":" + opc.remotoBase
 const rutasRemotas = [];
 for (const nombre of nombres) {
   for (const f of ficherosDelPerfil(nombre)) rutasRemotas.push(opc.remotoBase + "/" + nombre + "/" + f);
-  rutasRemotas.push(opc.remotoBase + "/" + nombre + "/node_modules/dsh-estudio-plugin/lib/index.js");
+  for (const f of FICHEROS_PLUGIN) rutasRemotas.push(opc.remotoBase + "/" + nombre + "/node_modules/dsh-estudio-plugin/" + f);
 }
 rutasRemotas.push(path.join(opc.repo, "plugin", "lib", "index.js").replace(/\\/g, "/"));
 const remotos = opc.conRemoto ? hashRemoto(rutasRemotas) : null;
@@ -160,11 +170,13 @@ for (const nombre of nombres) {
 }
 
 // 4. El plugin: el codigo instalado tiene que ser el de este repo.
-const hPluginRepo = hashLocal(path.join(opc.repo, "plugin", "lib", "index.js"));
 for (const nombre of nombres) {
-  const hLocal = hashLocal(path.join(opc.local, nombre, "node_modules", "dsh-estudio-plugin", "lib", "index.js"));
-  const hRemoto = opc.conRemoto ? remotos[opc.remotoBase + "/" + nombre + "/node_modules/dsh-estudio-plugin/lib/index.js"] ?? null : null;
-  fila(nombre + "/plugin", hPluginRepo, hLocal, hRemoto);
+  for (const f of FICHEROS_PLUGIN) {
+    const hRepo = hashLocal(path.join(opc.repo, f));
+    const hLocal = hashLocal(path.join(opc.local, nombre, "node_modules", "dsh-estudio-plugin", f));
+    const hRemoto = opc.conRemoto ? remotos[opc.remotoBase + "/" + nombre + "/node_modules/dsh-estudio-plugin/" + f] ?? null : null;
+    fila(nombre + "/" + f, hRepo, hLocal, hRemoto);
+  }
 }
 
 console.log("");
