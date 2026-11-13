@@ -123,7 +123,12 @@ export async function apply(ctx, config = {}) {
 
   // 3) La prueba de que el plugin esta vivo (sale en el log al arrancar).
   const identidad = (contenido.identidad.match(/Maquina:\s*(.+)/) ?? [])[1] ?? "sin identidad.md";
-  ctx.logger.info(
-    `[estudio] plugin cargado: perfil ${cfg.perfil}, maquina ${identidad.trim()}, canal ${canal.disponible ? "configurado" : "sin configurar"} (${canal.falta || "ok"})`,
-  );
+  const linea =
+    `[estudio] plugin cargado: perfil ${cfg.perfil}, maquina ${identidad.trim()}, ` +
+    `herramientas: canal_publicar, canal_listar, wip_reclamar, wip_soltar, wip_cerrar, wip_listar, ` +
+    `acuerdo_registrar, acuerdos_listar, canal ${canal.disponible ? "configurado" : "sin configurar"} (${canal.falta || "ok"})`;
+  ctx.logger.info(linea);
+  // En una CLI sin ventana (VPS, headless) el log puede ir filtrado: la linea se
+  // escribe tambien en stderr para que se vea al arrancar el perfil.
+  process.stderr.write(linea + "\n");
 }
