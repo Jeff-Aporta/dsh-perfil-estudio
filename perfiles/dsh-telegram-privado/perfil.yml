@@ -1,0 +1,24 @@
+# Perfil DSH dsh-telegram-privado del estudio de videos (13-nov-2026).
+nombre: dsh-telegram-privado
+descripcion: Solo conversa. Sin herramientas de escritura: ideal para el chat privado del autor.
+base: dsh-telegram
+proveedor: minimax
+modelo: MiniMax-M3
+reasoningEffort: high
+herramientas: estudio          # solo las herramientas locales del estudio (nada de shells remotos)
+canales:                      # los bots se comunican UNICAMENTE por aqui
+  - telegram
+prohibido:                    # vetado por la politica de comunicacion (POLITICA-COMUNICACION.md)
+  - ssh
+  - sftp
+  - scp
+  - rsync
+  - netcat
+  - sockets
+  - carpetas-compartidas
+permisos:
+  leer: true
+  escribir: false
+  ejecutar: false
+parche: cordis.patch.yml
+definiciones: definiciones.md

@@ -1,0 +1,15 @@
+{
+  "name": "dsh-telegram",
+  "private": true,
+  "dependencies": {
+    "dsh-estudio-plugin": "github:Jeff-Aporta/dsh-perfil-estudio"
+  },
+  "dsh": {
+    "profile": {
+      "bundles": [
+        "@deepseek-ai/dsh-base",
+        "@deepseek-ai/dsh-headless"
+      ]
+    }
+  }
+}

@@ -1,0 +1,34 @@
+# REGISTRO DE LOS PERFILES DSH DEL ESTUDIO (canonical: dsh-perfil-estudio)
+#
+# Cada perfil es una carpeta con:
+#   perfil.yml        nombre, descripcion, modelo, razonamiento, herramientas y permisos (capa 2)
+#   definiciones.md   los lineamientos EXTRA de ese perfil (entran en el prompt de su hilo)
+#   PERFIL-TG.md      el comportamento comun (copia del canonico de la raiz del repo)
+#   cordis.patch.yml  la capa de DSH: lo que se instala en ~/.dsh/profiles/<nombre>
+#   package.json      las dependencias (el plugin va como dependencia git de este repo)
+#   skills/           las skills del perfil (mismos bytes en PC y VPS)
+#
+# Se instalan TODOS con install.ps1 (PC) y install.sh (VPS);
+# verificar-paridad.mjs comprueba que PC y VPS tienen los mismos (hash a hash).
+#
+# El perfil por defecto es el que se usa en un hilo sin perfil asignado.
+porDefecto: dsh-telegram
+perfiles:
+  - nombre: dsh-canal
+    carpeta: dsh-canal
+    descripcion: El canal entre bots: D1 (memoria) + Realtime (push) + API (accionar) + R2 (ficheros de 72 h). Telegram queda para el autor.
+  - nombre: dsh-telegram
+    carpeta: dsh-telegram
+    descripcion: Base del chat de Telegram: reglas del estudio, MD obligatorio, WIP, DER y nada de cuota sin permiso.
+  - nombre: dsh-telegram-codigo
+    carpeta: dsh-telegram-codigo
+    descripcion: Puede tocar el motor y el kit, siempre desde el PC y con commit + push.
+  - nombre: dsh-telegram-consulta
+    carpeta: dsh-telegram-consulta
+    descripcion: Solo consulta y explica. NO escribe ficheros ni ejecuta comandos que cambien nada.
+  - nombre: dsh-telegram-privado
+    carpeta: dsh-telegram-privado
+    descripcion: Solo conversa. Sin herramientas de escritura: ideal para el chat privado del autor.
+  - nombre: dsh-telegram-produccion
+    carpeta: dsh-telegram-produccion
+    descripcion: Puede trabajar sobre la produccion (taller, cola, mp4) con las reglas del estudio.

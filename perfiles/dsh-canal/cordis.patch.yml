@@ -1,0 +1,73 @@
+# Perfil dsh-canal (el canal entre bots: D1 + Realtime + API + R2) - MiniMax M3 con razonamiento corto.
+# Se instala en ~/.dsh/profiles/<nombre> con tools/instalar-perfil.sh (VPS) o .ps1 (PC).
+- id: agent-default-model
+  name: "@deepseek-ai/dsh-agent-default-model"
+  config:
+    provider: minimax
+    model: MiniMax-M3
+    reasoningEffort: high
+- id: permission
+  name: "@deepseek-ai/dsh-permission-presets"
+  config:
+    presets:
+      read-only:
+        sandbox: read-only
+        approval: ask
+      workspace-write:
+        sandbox: workspace-write
+        approval: ask
+      danger-full-access:
+        sandbox: danger-full-access
+        approval: never
+    defaultPreset: danger-full-access
+- id: skill-filesystem
+  name: "@deepseek-ai/dsh-skill-filesystem"
+  config:
+    customSkillDirs:
+      - "skills"
+- id: llm-deepseek
+  name: "@deepseek-ai/dsh-llm-deepseek-api-key"
+  config:
+    apiKeyEnv: DEEPSEEK_API_KEY
+    thinking: disabled
+    reasoningEffort: off
+    maxTokens: 8192
+    models:
+      - id: deepseek-flash
+        name: DeepSeek-V4.1-Flash
+        contextWindow: 1048576
+        maxTokens: 393216
+        inputModalities:
+          - text
+          - image
+- id: llm-pi-ai
+  name: "@deepseek-ai/dsh-llm-pi-ai"
+  config:
+    providers:
+      minimax:
+        displayName: MiniMax
+        apiKeyEnv: MINIMAX_2_API_KEY
+        api: openai-completions
+        baseURL: https://api.minimax.io/v1
+        reasoning: low
+        models:
+          - id: MiniMax-M3
+            name: MiniMax M3
+            contextWindow: 1000000
+            maxTokens: 512000
+            input:
+              - text
+              - image
+            reasoningEfforts:
+              - low: low
+              - medium: medium
+              - high: high
+              - xhigh: xhigh
+              - max: max
+
+# El plugin del perfil: inyecta PERFIL-TG + definiciones + identidad en cada sesion
+# y registra las herramientas del canal, el WIP compartido y los acuerdos.
+- id: estudio
+  name: "dsh-estudio-plugin"
+  config:
+    perfil: dsh-canal
