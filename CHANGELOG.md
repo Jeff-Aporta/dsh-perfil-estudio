@@ -26,3 +26,21 @@ Todas las versiones de este repo (el formato es el de Keep a Changelog).
 - Actualizacion periodica: timer de systemd (cada 15 min) en el VPS y tarea programada de
   Windows (cada 15 min) en el PC, las dos versionadas aqui.
 - `verificar-paridad.mjs`: comparacion hash a hash de repo, PC y VPS.
+
+## [1.0.1] - 2026-11-13
+
+### Arreglado
+
+- El plugin se monta en el patch con `insert:` (con `id:` DSH lo tomaba como parche de una fila
+  que no existia y avisaba `patch: entry "estudio" not found`).
+- `.gitattributes`: todos los ficheros se guardan en LF, para que los hashes sean iguales en el PC
+  (que los checkout en CRLF) y en el VPS.
+- El timer de systemd usa `OnCalendar=*:0/15` (no dependia del arranque para programar la siguiente
+  ejecucion) y el verificador compara **todos** los ficheros del plugin, no solo su indice.
+
+### Comprobado
+
+- `node verificar-paridad.mjs` = PARIDAD OK (6 perfiles, hash a hash, en repo, PC y VPS).
+- `dsh --profile dsh-telegram --help` = `[estudio] plugin cargado: ... maquina pc / maquina vps`.
+- `node plugin/pruebas/prueba-plugin.mjs` = 16/16.
+- El timer del VPS y la tarea del PC, probados sin cambios: no reinstalan ni reinician nada.
