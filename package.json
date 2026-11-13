@@ -1,0 +1,48 @@
+{
+  "name": "dsh-estudio-plugin",
+  "version": "1.0.0",
+  "description": "Perfiles DSH canonicos del estudio de videos: el plugin, los perfiles, los instaladores y el verificador de paridad. Publico y SIN secretos.",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": {
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/",
+    "plugin/",
+    "perfiles/",
+    "skills/",
+    "sistema/",
+    "windows/",
+    "PERFIL-TG.md",
+    "MENTE-COLMENA.md",
+    "README.md",
+    "CHANGELOG.md",
+    "indice.yml",
+    "install.sh",
+    "install.ps1",
+    "actualizar.sh",
+    "actualizar.ps1",
+    "verificar-paridad.mjs"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "prueba": "node plugin/pruebas/prueba-plugin.mjs",
+    "verificar": "node verificar-paridad.mjs"
+  },
+  "dependencies": {
+    "@deepseek-ai/schemastery": "~3.19.0"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "~4.1.0",
+    "@deepseek-ai/dsh-tools": "0.2.2-rc.1"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/dsh-tools": {
+      "optional": true
+    }
+  }
+}

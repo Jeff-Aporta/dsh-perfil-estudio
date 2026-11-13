@@ -1,0 +1,30 @@
+{
+  "name": "dsh-estudio-plugin",
+  "version": "1.0.0",
+  "description": "Plugin DSH del estudio de videos: inyecta el perfil canonico (PERFIL-TG + definiciones + identidad) en cada sesion y registra las herramientas del canal, el WIP compartido y los acuerdos globales.",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": {
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/",
+    "README.md"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@deepseek-ai/schemastery": "~3.19.0"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "~4.1.0",
+    "@deepseek-ai/dsh-tools": "0.2.2-rc.1"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/dsh-tools": {
+      "optional": true
+    }
+  }
+}
