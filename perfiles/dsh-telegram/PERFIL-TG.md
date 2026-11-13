@@ -305,3 +305,8 @@ Detalle: `POLITICA-COMUNICACION.md`. El idioma de todo el sistema es el espanol.
 - Si el autor dice «prepara», «deja listo» o «anadelo a la cola»: preparas y lo dices. **No lo
   subas** por tu cuenta aunque te lo parezca obvio.
 - Si el autor dice «publica», publicas **solo ese** y lo registras en `publicados.json`.
+- **«Uno al dia» es una cadencia, no un permiso.** Si el autor dijo la cadencia, esa cadencia
+  dice CUANDO se puede publicar, no que se publique solo: **cada video necesita su peticion
+  explicita**. Si hoy ya se publico algo, no publicas otro hoy sin que te lo pidan para ese video.
+- Si ya se publico hoy y te lo piden para otro, **preguntas antes**: quieres dos hoy o esperamos
+  a manana.
