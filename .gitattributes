@@ -1,0 +1,4 @@
+# Los ficheros del perfil se comparan HASH a HASH entre el PC y el VPS:
+# tienen que ser los mismos bytes en todas las maquinas.
+# Con esto, git los deja siempre en LF (Windows incluido).
+* text=auto eol=lf
