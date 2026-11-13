@@ -2,8 +2,9 @@
 Description=Cada 15 minutos: actualizar el perfil DSH del estudio
 
 [Timer]
-OnBootSec=3min
-OnUnitActiveSec=15min
+# Cada cuarto de hora (a los minutos 0, 15, 30 y 45).
+OnCalendar=*:0/15
+# Si el VPS estaba apagado, se recupera al volver.
 Persistent=true
 Unit=dsh-perfil-actualizar.service
 
