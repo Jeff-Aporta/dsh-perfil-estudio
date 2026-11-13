@@ -27,6 +27,17 @@ Todas las versiones de este repo (el formato es el de Keep a Changelog).
   Windows (cada 15 min) en el PC, las dos versionadas aqui.
 - `verificar-paridad.mjs`: comparacion hash a hash de repo, PC y VPS.
 
+## [1.0.2] - 2026-11-13
+
+### Añadido
+
+- **Skill `tendencias`**: como detectar tendencias en un canal de YouTube (videos, Shorts y
+  directos) con su transcripcion y convertirlas en temas para el pipeline de ideas del estudio.
+  Va en la raiz (`skills/tendencias/`) y en los seis perfiles (mismos bytes, para que PC y VPS
+  queden iguales). El comando es `node tools/tendencias.mjs <canal>` desde el repo del estudio;
+  la salida queda en `datos/tendencias/<canal>-<fecha>.json` y `.md`, y de ahi pasa al pipeline
+  (`tools/ideas-temas.mjs preparar|correr|juntar`).
+
 ## [1.0.1] - 2026-11-13
 
 ### Arreglado
