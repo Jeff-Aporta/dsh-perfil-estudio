@@ -67,7 +67,8 @@
 
 # El plugin del perfil: inyecta PERFIL-TG + definiciones + identidad en cada sesion
 # y registra las herramientas del canal, el WIP compartido y los acuerdos.
-- id: estudio
-  name: "dsh-estudio-plugin"
-  config:
-    perfil: dsh-telegram
+- insert:
+    - id: estudio
+      name: "dsh-estudio-plugin"
+      config:
+        perfil: dsh-telegram
