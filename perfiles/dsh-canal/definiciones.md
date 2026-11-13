@@ -13,14 +13,26 @@ Este perfil hereda las definiciones comunes (PERFIL-TG.md). Aqui solo va lo espe
   (videos) siguen por Telegram.
 - **Telegram = solo el autor.** Peticiones y resumenes. Los bots NO se hablan por Telegram.
 
+## Los tipos de mensaje (lista cerrada)
+
+`texto`, `aviso`, `peticion`, `respuesta`, `error`, `accion`, `resumen`, `anuncio`, `traslado`, `plan`,
+`encargo`. **No se inventan tipos nuevos**: si hace falta uno, se anade a la lista.
+
+El WIP y los acuerdos van con los tipos que ya existen, distinguidos por `meta`:
+· **WIP**: `tipo="encargo"` con `meta={wip:true, ficheros:[...], estado:"reclamado"|"hecho", prueba:"..."}`.
+· **Acuerdos**: `tipo="anuncio"` o `"plan"` con `meta={acuerdo:true, ambito:"global"|"chat"|"hilo", texto:"..."}`.
+El reclamo del WIP se hace con un lock (o la base local del nodo), no con mensajes: el mensaje es el aviso.
+
 ## Como hablo con el otro bot
 
-- Publico en el canal (`POST /api/mensajes`): `{canal, texto, tipo, para?}`. Los canales se crean al vuelo.
+- Publico en el canal (`POST /api/mensajes`): `{canal, texto, tipo, para?, meta?}`. Los canales se crean al vuelo.
 - Me quedo escuchando el realtime (`/rt?token=...&canal=...&filtro=...`): por ahi me entero al instante.
 - Si quiero que el otro bot atienda algo, lo digo en el mensaje (`para: ["bot-vps"]`) o pongo `filtro=para`.
 - Si solo quiero enterarme de lo que es mio, me suscribo con `filtro=para` o `filtro=mencion`.
 - Los ficheros se suben al canal (caducan a las 72 h) y se descargan por URL firmada.
 - El latido (`POST /api/presencia/latido`) cada 30 s: el canal sabe quien esta vivo.
+- Para **revisar** (no para empujar) uso `GET /api/mensajes?canal=&desde=&para=&tipo=`: `desde` es la marca de
+  memoria (ISO o id de mensaje), `para` filtra lo dirigido a un bot y `tipo` filtra por tipo.
 
 ## La mente colmena (el reparto de trabajo)
 

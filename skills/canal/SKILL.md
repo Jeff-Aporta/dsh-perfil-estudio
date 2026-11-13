@@ -41,7 +41,7 @@ node canal/cliente/canal.mjs escuchar --canal=estudio:general
 | Ruta | Que hace |
 |---|---|
 | `POST /api/mensajes` | Publicar un mensaje (`{canal, texto, tipo, para?, adjuntos?, meta?}`) |
-| `GET /api/mensajes?canal=&desde=&limite=` | La memoria: los mensajes desde una marca (`desde` = ISO o id de mensaje) |
+| `GET /api/mensajes?canal=&desde=&limite=&para=&tipo=` | La memoria: los mensajes desde una marca (`desde` = ISO o id). Filtros: `para` (solo lo dirigido a ese bot) y `tipo` (solo ese tipo) |
 | `GET /api/mensajes/{id}` | Un mensaje |
 | `PATCH /api/mensajes/{id}` | Editarlo (solo su autor, el autor del estudio o un admin) |
 | `DELETE /api/mensajes/{id}` | **Baja lógica**: el mensaje se conserva, marcado como borrado |
@@ -59,8 +59,15 @@ node canal/cliente/canal.mjs escuchar --canal=estudio:general
 
 Los errores son `{"error": "..."}` en español, con el codigo HTTP (400, 401, 403, 404).
 
-**Tipos de mensaje**: `texto`, `aviso`, `peticion`, `respuesta`, `error`, `accion`, `resumen`, `anuncio`,
-`traslado`, `plan`, `encargo`.
+**Tipos de mensaje (LISTA CERRADA, la que fijo el autor)**: `texto`, `aviso`, `peticion`, `respuesta`,
+`error`, `accion`, `resumen`, `anuncio`, `traslado`, `plan`, `encargo`. Si hace falta uno nuevo, se anade
+a la lista (en el Worker y en el perfil), no se improvisa.
+
+**El WIP y los acuerdos en el canal**: se representan con los tipos que YA existen, distinguidos por el campo `meta`:
+· **WIP**: `tipo="encargo"` con `meta={wip:true, ficheros:[...], estado:"reclamado"|"hecho", prueba:"..."}`.
+· **Acuerdos**: `tipo="anuncio"` o `tipo="plan"` con `meta={acuerdo:true, ambito:"global"|"chat"|"hilo", texto:"..."}`.
+· El **reclamo** del WIP NO se hace con mensajes (no hay atomicidad): se hace con un lock de fichero o con la base
+  local por nodo; el mensaje del canal es el **aviso** del reclamo.
 
 ## 2. El realtime (enterarse al instante)
 
@@ -93,7 +100,20 @@ Lo que llega:
   15 minutos.
 - Los ficheros pesados (vídeos) **no** van por aqui: siguen por Telegram.
 
-## 4. La mente colmena (la llave del reparto de trabajo)
+## 4. El esquema (que manda y por que)
+
+- El **esquema canonico** es el del Worker `estudio-canal`: tablas `canal_mensajes`, `canal_reacciones`,
+  `canal_adjuntos`, `canal_canales` y `canal_presencia` en la base `jagudeloe-ecosystem` (la misma que usa
+  api-avatar). El Worker esta desplegado, con su API publica y sus datos: **manda**.
+- El **plugin de canal de DER** (`canalServer`) es la **implementacion de referencia** para migrar despues. Como sus
+  tablas se llamaban igual, se renombraron a `der_canal_*` (`der_canal_mensajes`, `der_canal_reacciones`,
+  `der_canal_adjuntos`): asi **conviven sin conflicto**. La tabla de equivalencias columna a columna y la via de
+  migracion (con controllers de DER, sin SQL crudo) estan en el MD del plugin de DER
+  (`skills/canal.md` y `docs/050-Plugins/100-Canal.md`).
+- El Worker **ya usa los helpers de DER**: el de **JWT HS256** (la puerta del canal) y el de **R2 con caducidad**
+  (la purga de lo vencido, metadato `der-expira`). El dato de datos es el canonico del Worker.
+
+## 5. La mente colmena (la llave del reparto de trabajo)
 
 El mecanismo con el que los bots atienden las peticiones del autor sin responderse por Telegram:
 
@@ -110,7 +130,7 @@ El mecanismo con el que los bots atienden las peticiones del autor sin responder
 El codigo que lo hace esta en `canal/bot/colmena.mjs` (el mismo en el PC y en el VPS) y las pruebas de aceptacion del
 autor en `canal/pruebas/arnes-colmena.mjs` (`PASA` o `FALLA`).
 
-## 5. Reglas de convivencia en el canal
+## 6. Reglas de convivencia en el canal
 
 - **No se responde dos veces** a lo mismo: si un aviso ya se traslado, ese aviso esta gastado.
 - **El bot que traslada no contesta al autor**: solo deja constancia y avisa.
