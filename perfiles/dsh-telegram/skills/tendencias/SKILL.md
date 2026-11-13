@@ -19,10 +19,10 @@ Todo se usa con rutas relativas al repo, asi que el mismo comando vale en los do
 
 Desde la raiz del repo del estudio:
 
-`bash
+```bash
 node tools/tendencias.mjs midudev
 node tools/tendencias.mjs la_inteligencia_artificial
-`
+```
 
 En PowerShell el arroba se come (es splatting): usa el alias sin arroba (`midudev`) o entrecomilla
 (`"@midudev"`).
@@ -63,29 +63,30 @@ Que hace por dentro, y que conviene explicar si el autor pregunta:
 
 Cada tema sale con los 7 campos que ya usa el pipeline: `titulo`, `tema`, `tipo`, `resumen`, `gancho`,
 `area` y `visitas30` (las vistas del video de origen). Ademas lleva su fragmento literal
-(`fragmento`, `canal`, `video`, `enlace`, `marcaTiempo``) para poder verificarlo.
+(`fragmento`, `canal`, `video`, `enlace`, `marcaTiempo`) para poder verificarlo.
 
 ## 3. De temas a ideas (el pipeline que YA existe)
 
-`bash
+```bash
 node tools/ideas-temas.mjs preparar 120 datos/tendencias/midudev-2026-11-13.json
 node tools/ideas-temas.mjs correr 4
 node tools/ideas-temas.mjs juntar
-`
+```
 
-- `preparar` parte la fuente en lotes (`datos/investigacion/ideas/lote-NNN.json`) y escribe la tarea.
+- `preparar` parte la fuente en lotes (`datos/investigacion/ideas/lote-NNN.json`; si la fuente no es la de
+  Wikipedia, el lote lleva su nombre: `lote-<fuente>-NNN.json`, para no pisar los de otra fuente) y escribe la tarea.
 - `correr` lanza un agente DSH por lote: **gasta cuota de MiniMax**, solo con el sí escrito del autor.
 - `juntar` une las notas en `datos/investigacion/ideas-5estrellas.json` (ahi estan las ideas con su
   `formato`, `titulo_video`, `gancho`, `puntos`, `cierre`, `visual`, `datos_a_verificar` y `atractivo`).
 
-Para probar la cadena sin gastar cuota: `node tools/ideas-temas.mjs mock lote-001.json` (notas de ejemplo).
+Para probar la cadena sin gastar cuota: `node tools/ideas-temas.mjs mock <lote> --lotes <dir>` (notas de ejemplo).
 
 ## 4. De ideas a historia del estudio
 
-`bash
+```bash
 node tools/tendencias-historia.mjs ideas --origen datos/investigacion/ideas-5estrellas.json --limite 20
 node tools/tendencias-historia.mjs historia datos/serie/epica/<slug>.idea.json
-`
+```
 
 - El primer comando deja una idea por tema en `datos/serie/epica/<slug>.idea.json`, el formato que ya
   come la granja (`node tools/producir-epicos.mjs`).
@@ -109,9 +110,9 @@ node tools/tendencias-historia.mjs historia datos/serie/epica/<slug>.idea.json
 
 ## 6. Pruebas (no pegan a YouTube)
 
-`bash
+```bash
 node --test datos/tendencias/_muestra/tendencias.test.mjs
-`
+```
 
 Las muestras estan en `datos/tendencias/_muestra/` (pagina `watch` con `captionTracks`, subtitulos
-`json3``, pagina de canal y una fuente de tendencias de ejemplo).
+`json3`, pagina de canal y una fuente de tendencias de ejemplo).
