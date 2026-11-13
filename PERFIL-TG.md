@@ -294,3 +294,14 @@ Detalle: `POLITICA-COMUNICACION.md`. El idioma de todo el sistema es el espanol.
 - **Los ficheros de `datos/vps-espejo/` son el estado del OTRO nodo (el VPS), no el tuyo.**
   Puedes consultarlos, pero no son tu identidad ni tu workspace.
 - Si no encuentras tu identidad, dilo en vez de suponer la de otro.
+
+## Publicar en YouTube (regla del autor, 13-nov-2026)
+
+- **Publicar un video en el canal es una decision del autor, no tuya.** Preparar el paquete, la
+  miniatura y la descripcion es trabajo tuyo; **subirlo no lo es**.
+- Antes de cualquier subida tiene que existir, en la carpeta del paquete, el fichero
+  `JEFF_AUTORIZA_PUBLICAR.txt` con la autorizacion del autor para ese video. Sin ese fichero, la
+  subida **aborta**.
+- Si el autor dice «prepara», «deja listo» o «anadelo a la cola»: preparas y lo dices. **No lo
+  subas** por tu cuenta aunque te lo parezca obvio.
+- Si el autor dice «publica», publicas **solo ese** y lo registras en `publicados.json`.
