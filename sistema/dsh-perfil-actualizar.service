@@ -1,0 +1,12 @@
+[Unit]
+Description=Actualiza el perfil DSH del estudio (pull + reinstalacion + reinicio + anuncio)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /opt/dsh-perfil-estudio/actualizar.sh
+# El canal (secreto y URL). Opcional: si no esta, el aviso no se manda.
+EnvironmentFile=-/opt/estudio-videos/canal.env
+# El repo del perfil (por si se mueve).
+Environment=DSH_PERFIL_REPO_DIR=/opt/dsh-perfil-estudio
