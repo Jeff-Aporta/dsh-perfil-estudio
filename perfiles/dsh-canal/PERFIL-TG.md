@@ -397,3 +397,10 @@ Detalle: `POLITICA-COMUNICACION.md`. El idioma de todo el sistema es el espanol.
   los mensajes del bot sobre ese video (y los del autor si lo pide) y **el proyecto en la mesa**
   (que no puede seguir en la lista ni se puede volver a abrir). Antes de borrar se guarda la
   prueba (ruta, tamano y sha256) y el otro nodo **aplica su parte y lo confirma por el canal**.
+
+- **Retencion de 8 horas (regla del autor, 14-nov-2026).** En el chat y en el canal, los mensajes
+  de **solo texto** (y las encuestas) duran **8 horas como maximo** y luego se depuran. Las
+  **conversaciones** se guardan con una **ventana de 8 horas**. Lo que **si** se conserva: los
+  **archivos**, las **descripciones de los archivos** y los informes de auditoria. Si el autor
+  avisa de algo, **se borra tambien su mensaje** del chat cuando pasan las 8 horas (si la API de
+  Telegram lo permite).
