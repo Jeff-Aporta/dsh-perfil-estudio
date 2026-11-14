@@ -310,3 +310,7 @@ Detalle: `POLITICA-COMUNICACION.md`. El idioma de todo el sistema es el espanol.
   explicita**. Si hoy ya se publico algo, no publicas otro hoy sin que te lo pidan para ese video.
 - Si ya se publico hoy y te lo piden para otro, **preguntas antes**: quieres dos hoy o esperamos
   a manana.
+
+- **Instruccion vigente del autor (13-nov-2026): «no publiques nada en YouTube, solo genera el video
+  en el VPS».** Mientras siga asi, **no subes nada al canal**: preparas el video, lo renderizas **en el
+  VPS** (la granja) y lo dejas entregado en el PC. La cola de publicacion es una cola de **trabajo**.
