@@ -19,6 +19,7 @@
 import z from "@deepseek-ai/schemastery";
 import { ClienteCanal } from "./canal.js";
 import { contenidoDelPerfil, directorioPerfil } from "./perfil.js";
+import { decisionRespaldo, respaldoActivo } from "./respaldo.js";
 import { registrarHerramientas } from "./herramientas.js";
 import { WipLocal } from "./wip.js";
 
@@ -55,6 +56,11 @@ export const Config = z.object({
   wipDir: z.string(),
   /** Si se avisa al canal cuando se reclama o se cierra trabajo. */
   wipAvisar: z.boolean().default(true),
+  /** El respaldo por falta de cuota (apagado por defecto). */
+  respaldoDeepseek: z.boolean().default(false),
+  /** La ruta de reserva: el proveedor y el modelo a los que se pasa la sesion. */
+  respaldoProveedor: z.string().default("deepseek-official"),
+  respaldoModelo: z.string().default("deepseek-flash"),
 });
 
 /** Rellena los valores que el loader no puso (por si se llama a mano). */
@@ -75,6 +81,8 @@ export async function apply(ctx, config = {}) {
     canalSecretoEnv: "CANAL_JWT",
     acuerdosCanal: "estudio:acuerdos",
     wipAvisar: true,
+    respaldoProveedor: "deepseek-official",
+    respaldoModelo: "deepseek-flash",
   });
 
   const dir = directorioPerfil({ dirPerfil: cfg.dirPerfil, perfil: cfg.perfil });
@@ -121,7 +129,33 @@ export async function apply(ctx, config = {}) {
     wipCanal: cfg.wipAvisar ? cfg.wipCanal ?? cfg.acuerdosCanal : undefined,
   });
 
-  // 3) La prueba de que el plugin esta vivo (sale en el log al arrancar).
+  // 3) El RESPALDO por falta de cupo: detras de la bandera RESPALDO_DEEPSEEK=1.
+  // El DSH no trae un proveedor de reserva incorporado: cuando un turno falla porque el
+  // modelo se quedo sin cupo (429/402), la sesion pasa a la ruta de reserva (DeepSeek) y el
+  // siguiente turno sigue ahi. El paso que falla NO se puede repetir en otro proveedor
+  // desde un plugin (el bucle captura la ruta al abrir el paso), asi que el respaldo es
+  // "el siguiente turno continua", no "este turno se repite".
+  if (respaldoActivo(process.env, cfg)) {
+    const ruta = { provider: cfg.respaldoProveedor, model: cfg.respaldoModelo };
+    ctx.on("agent/request-error", async ({ agent, failure }, next) => {
+      let actual = null;
+      try { actual = agent?.model?.current?.() ?? null; } catch {}
+      const decision = decisionRespaldo({ failure, actual, ruta });
+      if (!decision.cambiar) return await next();
+      try {
+        agent.model.select(decision.ruta);
+      } catch (e) {
+        ctx.logger.warn("[estudio] no se pudo cambiar la ruta de la sesion: " + (e?.message ?? e));
+        return await next();
+      }
+      const linea = `[estudio] sin cuota en ${decision.desde}: la sesion pasa a ${decision.ruta.provider}/${decision.ruta.model} (el siguiente turno sigue ahi)`;
+      ctx.logger.info(linea);
+      process.stderr.write(linea + "\n");
+      return await next();
+    });
+  }
+
+  // 4) La prueba de que el plugin esta vivo (sale en el log al arrancar).
   const identidad = (contenido.identidad.match(/Maquina:\s*(.+)/) ?? [])[1] ?? "sin identidad.md";
   const linea =
     `[estudio] plugin cargado: perfil ${cfg.perfil}, maquina ${identidad.trim()}, ` +

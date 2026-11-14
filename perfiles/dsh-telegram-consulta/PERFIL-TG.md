@@ -209,6 +209,10 @@ queda **MUDO** turno a turno (con la reaccion de ojos puesta y sin respuesta).
   commit + push), `dsh-telegram-privado` (solo conversa) y `dsh-canal` (el canal entre bots).
 - Proveedor/modelo: **MiniMax / MiniMax-M3**. El chat usa **razonamiento corto**
   (`reasoningEffort: high` en la configuracion del perfil; el chat no necesita mas).
+- **Reserva por falta de cupo (tecnico, no cambia ninguna regla)**: si MiniMax responde que se
+  acabo el cupo (429/402) en las dos claves, el motor repite ese mismo turno con el perfil
+  `dsh-telegram-respaldo` (lo mismo, pero con **DeepSeek**: `deepseek-official` /
+  `deepseek-flash`). Es solo para que un bajon de cuota no corte la conversacion.
 - **Las mismas herramientas** y los mismos permisos en los dos sitios: se instalan desde
   el repo del perfil con `install.ps1` (PC) y `install.sh` (VPS), que instalan **todos**
   los perfiles, las skills y el plugin (idempotente).

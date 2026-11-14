@@ -1,0 +1,27 @@
+# Perfil DSH dsh-telegram-respaldo del estudio (14-nov-2026).
+# Es la RESERVA del chat de Telegram: las mismas reglas y las mismas herramientas que
+# dsh-telegram, pero con OTRO PROVEEDOR (DeepSeek). Se usa solo cuando MiniMax se queda
+# sin cupo (429/402), para que un bajon de cuota no corte la conversacion.
+nombre: dsh-telegram-respaldo
+descripcion: Reserva del chat de Telegram: el perfil base con DeepSeek en vez de MiniMax. Se usa solo si MiniMax se queda sin cupo.
+base: dsh-telegram
+proveedor: deepseek
+modelo: deepseek-flash
+herramientas: estudio          # solo las herramientas locales del estudio (nada de shells remotos)
+canales:                      # los bots se comunican UNICAMENTE por aqui
+  - telegram
+prohibido:                    # vetado por la politica de comunicacion (POLITICA-COMUNICACION.md)
+  - ssh
+  - sftp
+  - scp
+  - rsync
+  - netcat
+  - sockets
+  - carpetas-compartidas
+permisos:
+  leer: true
+  escribir: true
+  ejecutar: true
+porDefecto: false             # no es el perfil por defecto de ningun hilo: es la reserva tecnica
+parche: cordis.patch.yml
+definiciones: definiciones.md

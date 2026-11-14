@@ -37,12 +37,39 @@ export function leerTexto(dir, nombre) {
   }
 }
 
+/**
+ * La identidad del NODO (no del perfil).
+ *
+ * La identidad.md es POR NODO (la escribe instalar-identidad.mjs): es la misma para todos
+ * los perfiles de esta maquina. Por eso, si un perfil no la tiene (el perfil de respaldo es
+ * una copia del base y el instalador nunca copia la identidad), se busca la de los perfiles
+ * hermanos: primero el base (dsh-telegram) y luego cualquier otro que la tenga.
+ */
+export function identidadDelNodo(dir) {
+  const propia = leerTexto(dir, "identidad.md");
+  if (propia.trim()) return { texto: propia, fuente: "el propio perfil" };
+  const hermanos = path.dirname(dir);
+  const candidatos = ["dsh-telegram"];
+  try {
+    for (const e of fs.readdirSync(hermanos, { withFileTypes: true })) {
+      if (e.isDirectory() && !candidatos.includes(e.name)) candidatos.push(e.name);
+    }
+  } catch {}
+  for (const c of candidatos) {
+    const t = leerTexto(path.join(hermanos, c), "identidad.md");
+    if (t.trim()) return { texto: t, fuente: "perfil " + c };
+  }
+  return { texto: "", fuente: null };
+}
+
 /** Todo lo que el plugin mete en el prompt de cada sesion. */
 export function contenidoDelPerfil(dir) {
+  const identidad = identidadDelNodo(dir);
   return {
     perfilTelegram: leerTexto(dir, "PERFIL-TG.md"),
     definiciones: leerTexto(dir, "definiciones.md"),
-    identidad: leerTexto(dir, "identidad.md"),
-    identidadFalta: !fs.existsSync(path.join(dir, "identidad.md")),
+    identidad: identidad.texto,
+    identidadFuente: identidad.fuente,
+    identidadFalta: !identidad.texto.trim(),
   };
 }

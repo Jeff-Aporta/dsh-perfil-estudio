@@ -34,7 +34,26 @@ comportan **exactamente igual** y las actualizaciones se hacen con **pull + push
 | `dsh-telegram-produccion` | Produccion (taller, cola, mp4). |
 | `dsh-telegram-codigo` | Motor y kit (siempre desde el PC, con commit + push). |
 | `dsh-telegram-privado` | Solo conversa (chat privado del autor). |
+| `dsh-telegram-respaldo` | **Reserva** del chat: el perfil base con DeepSeek. Entra solo si MiniMax se queda sin cupo. |
 | `dsh-canal` | El canal entre bots (D1 + Realtime + API + R2). |
+
+## El perfil de respaldo (`dsh-telegram-respaldo`)
+
+Es una **copia de `dsh-telegram` con otro proveedor**: las mismas reglas, las mismas
+herramientas, los mismos permisos y el mismo plugin, pero el modelo es **DeepSeek**
+(`deepseek-official` / `deepseek-flash`) en vez de MiniMax.
+
+**Para que sirve**: cuando MiniMax responde que se acabo el cupo (429/402) en las dos
+claves, el bot reintenta ese mismo turno con este perfil, de modo que un bajon de cuota
+**no corta la conversacion**. Si el respaldo tambien falla, el bot contesta con los datos
+directos y guarda el mensaje para responder luego (el comportamiento de siempre).
+
+- No es el perfil por defecto de ningun hilo: no aparece en `/perfil` ni en el registro
+  de perfiles del estudio. Es una reserva tecnica.
+- La clave que necesita es `DEEPSEEK_API_KEY` (`~/.dsh/claves.env` en el PC;
+  en el VPS viaja por `tools/sync-keys.mjs` hasta `fabrica/dsh.env`).
+- En el GUI (este chat) el equivalente lo hace el **plugin**, detras de la bandera
+  `RESPALDO_DEEPSEEK=1` (apagada por defecto).
 
 ## El plugin (`dsh-estudio-plugin`)
 

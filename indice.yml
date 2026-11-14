@@ -32,3 +32,6 @@ perfiles:
   - nombre: dsh-telegram-produccion
     carpeta: dsh-telegram-produccion
     descripcion: Puede trabajar sobre la produccion (taller, cola, mp4) con las reglas del estudio.
+  - nombre: dsh-telegram-respaldo
+    carpeta: dsh-telegram-respaldo
+    descripcion: Reserva del chat de Telegram: el perfil base con DeepSeek en vez de MiniMax. Entra solo si MiniMax se queda sin cupo (429/402), para que un bajon de cuota no corte la conversacion.
