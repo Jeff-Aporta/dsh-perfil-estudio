@@ -120,6 +120,83 @@ Reglas:
   el bot local sigue contestando **también** ahí, en el tema general, además de su chat privado; en los demás grupos
   solo está el bot del VPS. En el canal solo contesta el autor y quien esté autorizado en ese tema.
 
+### 3.5. Las CITAS: cuando el autor responde a un mensaje anterior (13-nov-2026)
+
+Cuando el autor escribe **citando** un mensaje anterior, Telegram te lo entrega de tres maneras y
+las tres se atienden: `reply_to_message` (el mensaje citado completo), `quote` (solo el texto) y
+`external_reply` (la referencia a un mensaje de otro chat). El bot lo entiende y te lo dice
+**en el turno actual**, con un bloque `[Cita]`.
+
+- **Si el autor cita un mensaje tuyo**, se dice ("el autor responde a TU mensaje anterior").
+  Responde **sobre ese mensaje**, no sobre el texto nuevo: "como te dije", "lo de antes" y
+  "este" se refieren a el.
+- **Si el mensaje citado no tiene texto** (nota de voz, imagen, video, sticker), se **describe**
+  ("cita una nota de voz sin transcribir", "cita una imagen"). No se omite.
+- **Si es de otro chat o de otro tema**, se dice: no puedes saber de mas.
+- **Si el mensaje citado no esta en tu historial**, se dice con honestidad ("no lo tengo a la
+  vista"). No inventes el contexto: la cita es lo que Telegram te entrega, nada mas.
+- El texto del autor y el del mensaje citado son cosas distintas: la cita es **informacion para
+  ti**, no un mensaje mas del chat. En el historial solo queda lo que el autor escribio.
+
+Asi llega el bloque al prompt:
+
+    [Cita] El autor responde a un mensaje anterior de Jeff Aporta (Telegram id 8707019767, este mismo hilo, mensaje #123): "primero el guion y despues las tomas".
+
+La cita tambien se guarda en la base del chat (el campo `meta` del mensaje), para que la traza
+y la auditoria la vean.
+
+### 3.6. DESCARTAR un video (13-nov-2026, solo el autor)
+
+`/descartar <lo que sea>` (y tambien en lenguaje natural: "descarta este video", "este video no
+me gusta, eliminalo", "borra el video de X") saca el video **del sistema**:
+
+- la idea queda marcada con `"descartada": true`, el motivo y la fecha;
+- sale de las colas de trabajo (la de la mesa, la del taller, la de la fabrica y la de
+  publicacion) y de las listas de pendientes del estudio y del equipo;
+- se borran los ficheros ya renderizados (el mp4, el proyecto del kit y las copias del guion);
+- se borra el mensaje del chat donde se anuncio el video;
+- y queda anotado en `datos/serie/DESCARTADAS.md` con el motivo que dio el autor.
+
+Reglas:
+
+- **Solo el autor** descarta. Los demas reciben un aviso y no se borra nada.
+- El video se resuelve por la **cita**, por el **titulo**, por el **slug** o por **palabras
+  clave**.
+- **Si hay dudas, se PREGUNTA**: nunca se borra de mas.
+- Los **mensajes del autor no se pueden borrar** desde el bot (la API no los deja): se dice con
+  honestidad ("no puedo borrar tu mensaje, pero ya no lo publico") y se sigue con el resto.
+
+### 3.7. El CONTEXTO: el bot mide lo que consume y compacta solo (13-nov-2026)
+
+El bot mide los tokens de cada turno (los que dice el DSH) y los guarda por hilo. Si el
+contexto de entrada pasa del umbral (**45.000 tokens** por defecto; se cambia con
+`CONTEXTO_MAX_TOKENS`, y `CONTEXTO_COMPACTAR=0` lo apaga), el bot **compacta solo**:
+
+- resume el hilo (el dialogo guardado + las tareas pendientes + las decisiones + lo que falta
+  por verificar) en un **estado compacto**;
+- **abre una sesion nueva** sembrada con ese resumen (y con las definiciones, una vez);
+- guarda el nuevo id de sesion, para que el hilo continue en la sesion compacta;
+- y deja el rastro en el log: «contexto compactado: 46.700 -> ~8.200 tokens». Al autor solo se le
+  dice cuando el ahorro es grande.
+
+Si el modelo no puede resumir, el bot **compacta igual** con un resumen automatico (lo que se
+sebe del hilo: tareas, reglas, decisiones y los ultimos intercambios): es una salvaguarda, no una
+excepcion. El bot nunca se queda mudo por esto.
+
+Lo importante que se conserva: las reglas del autor, las tareas pendientes y las decisiones.
+### 3.8. La CREDENCIAL del modelo (13-nov-2026, fallo real del VPS)
+
+El bot necesita la **credencial del modelo** (MiniMax) en su entorno. Si no la tiene, el DSH lo
+dice («MISSING_CREDENTIAL: llm-pi-ai: no credential for provider route minimax») y el bot se
+queda **MUDO** turno a turno (con la reaccion de ojos puesta y sin respuesta).
+
+- Al arrancar, el bot lo **comprueba y lo dice en el log**: «modelo: credencial lista» o
+  «modelo: SIN CREDENCIAL (falta MINIMAX_2_API_KEY)». Si no la tiene, **avisa al autor** una
+  vez: no se calla en silencio.
+- El bot es **autonomo**: si `DSH_ENV` no esta en el entorno, busca solo el fichero de entorno
+  que exista (`fabrica/dsh.env` en el VPS; `telegram-local.env` en el PC) y lo usa.
+- En el VPS el servicio lo carga con el drop-in `50-entorno.conf` (versionado en
+  `vps/telegram-cadena.d/`), que instala `tools/instalar-servicio-telegram-vps.sh`.
 ## 4. Los perfiles DSH (identicos en los dos sitios)
 
 - El **perfil canonico vive en un solo repo**: https://github.com/Jeff-Aporta/dsh-perfil-estudio
