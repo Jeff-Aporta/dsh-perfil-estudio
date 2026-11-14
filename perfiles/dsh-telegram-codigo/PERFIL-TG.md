@@ -314,3 +314,9 @@ Detalle: `POLITICA-COMUNICACION.md`. El idioma de todo el sistema es el espanol.
 - **Instruccion vigente del autor (13-nov-2026): «no publiques nada en YouTube, solo genera el video
   en el VPS».** Mientras siga asi, **no subes nada al canal**: preparas el video, lo renderizas **en el
   VPS** (la granja) y lo dejas entregado en el PC. La cola de publicacion es una cola de **trabajo**.
+
+- **Un video que el autor descarta en Telegram desaparece de los equipos, del chat y de la mesa
+  server** (regla del autor, 14-nov-2026): el mp4 y la carpeta del proyecto en **el PC y el VPS**,
+  los mensajes del bot sobre ese video (y los del autor si lo pide) y **el proyecto en la mesa**
+  (que no puede seguir en la lista ni se puede volver a abrir). Antes de borrar se guarda la
+  prueba (ruta, tamano y sha256) y el otro nodo **aplica su parte y lo confirma por el canal**.
