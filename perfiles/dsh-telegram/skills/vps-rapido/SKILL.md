@@ -41,3 +41,6 @@ systemctl is-active telegram-cadena fabrica-kit taller-dsh
 tail -5 /opt/estudio-videos/telegram/historial.jsonl
 find /opt/estudio-videos/kit/projects -path "*/out/*.mp4" -newermt "$(date +%F)"
 ```
+
+## Cola de render (siempre)
+- Encolar: `/opt/estudio-videos/tools/cola-render.sh encolar <proyecto>` (servicio `render-cola`). Avisa por Telegram con el estado de la cola, manda la previa de 9 fotogramas, el avance en vivo (1 cuadro/s, borrado a las 47 h) y el video al final. Estado: `cola-render.sh estado`.
