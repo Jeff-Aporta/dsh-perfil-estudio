@@ -3,8 +3,8 @@ nombre: dsh-canal
 descripcion: El canal entre bots: D1 (memoria) + Realtime (push) + API (accionar) + R2 (ficheros de 72 h). Telegram queda para el autor.
 base: dsh-telegram
 proveedor: minimax
-modelo: MiniMax-M3
-reasoningEffort: high
+modelo: MiniMax-M3.1-Flash-Preview
+reasoningEffort: medium
 herramientas: estudio          # solo las herramientas locales del estudio (nada de shells remotos)
 canales:                      # los bots se coordinan por el canal (no por Telegram)
   - canal

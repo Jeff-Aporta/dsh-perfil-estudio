@@ -3,8 +3,8 @@ nombre: dsh-telegram-codigo
 descripcion: Puede tocar el motor y el kit, siempre desde el PC y con commit + push.
 base: dsh-telegram
 proveedor: minimax
-modelo: MiniMax-M3
-reasoningEffort: high
+modelo: MiniMax-M3.1-Flash-Preview
+reasoningEffort: medium
 herramientas: estudio          # solo las herramientas locales del estudio (nada de shells remotos)
 canales:                      # los bots se comunican UNICAMENTE por aqui
   - telegram

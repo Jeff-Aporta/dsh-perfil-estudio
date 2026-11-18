@@ -3,8 +3,8 @@ nombre: dsh-telegram-privado
 descripcion: Solo conversa. Sin herramientas de escritura: ideal para el chat privado del autor.
 base: dsh-telegram
 proveedor: minimax
-modelo: MiniMax-M3
-reasoningEffort: high
+modelo: MiniMax-M3.1-Flash-Preview
+reasoningEffort: medium
 herramientas: estudio          # solo las herramientas locales del estudio (nada de shells remotos)
 canales:                      # los bots se comunican UNICAMENTE por aqui
   - telegram

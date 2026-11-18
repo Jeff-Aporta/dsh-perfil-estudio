@@ -3,8 +3,8 @@ nombre: dsh-telegram
 descripcion: Base del chat de Telegram: reglas del estudio, MD obligatorio, WIP, DER y nada de cuota sin permiso.
 base: dsh-telegram
 proveedor: minimax
-modelo: MiniMax-M3
-reasoningEffort: high
+modelo: MiniMax-M3.1-Flash-Preview
+reasoningEffort: medium
 herramientas: estudio          # solo las herramientas locales del estudio (nada de shells remotos)
 canales:                      # los bots se comunican UNICAMENTE por aqui
   - telegram
