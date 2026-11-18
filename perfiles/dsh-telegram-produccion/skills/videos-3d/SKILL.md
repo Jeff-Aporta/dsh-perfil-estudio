@@ -45,3 +45,9 @@ mocap CMU (2.548 BVH). Copia al proyecto (`assets/`) solo lo que uses.
 ## 4. Entrega
 Commit pequeño solo con tus archivos + push. Los videos y builds no se suben (`.gitignore`). Avisa al autor con
 fotogramas o el mp4 (los del VPS se mandan por Telegram de inmediato).
+
+## 5. Ahorro de tokens y relevo (leer siempre)
+- Antes de nada lee `referencias/handoff-videos.md` del kit (estado, reglas, receta). Lee solo los archivos que vas a tocar.
+- Edita con scripts Python en archivo; fotogramas a media resolución en el PC; videos solo en el VPS (`tools/lanzar-tanda.sh`).
+- Sin parpadeo: calcomanías separadas ≥1 cm, nada aleatorio por cuadro; verifica con dos fotogramas seguidos de cámara quieta.
+- Si Claude no tiene cuota, tú relevas: siguiente tarea de `referencias/tareas-3d.md`, y anota lo hecho en el handoff.
