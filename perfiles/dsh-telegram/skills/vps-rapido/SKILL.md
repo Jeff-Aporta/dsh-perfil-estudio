@@ -30,8 +30,8 @@ description: >-
 - **Todo video que produzca el VPS se manda por Telegram de inmediato**, sin excepción (ledger `telegram/enviados.jsonl`).
 
 ## R2 (bucket `estudio-videos`, borra a los 10 días)
-- Subir uno: `/opt/estudio-videos/r2-subir-uno.sh <archivo> <clave>` (usa el token de wrangler).
-- Si responde **401**: la sesión de wrangler venció → el autor corre `wrangler login` en el VPS (no se automatiza).
+- Subir uno: `/opt/estudio-videos/r2-subir-uno.sh <archivo> <clave>` (usa `wrangler r2 object put … --remote`; el token OAuth NO sirve en la API REST de objetos: da 401).
+- Si falla por sesión vencida: el autor corre `wrangler login` en el VPS; el navegador del PC no llega al `localhost:8976` del VPS, así que el autor pega la URL del callback y se completa con `curl "<url>"` dentro del VPS.
 - Bajar en el PC: `python r2-videos.py bajar inspiracion D:/VPS/estudio-videos/datos/inspiracion/telegram`
   (necesita credenciales S3 en `.env`; si no hay, `scp` desde el VPS).
 
