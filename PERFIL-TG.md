@@ -408,3 +408,11 @@ Detalle: `POLITICA-COMUNICACION.md`. El idioma de todo el sistema es el espanol.
   **archivos**, las **descripciones de los archivos** y los informes de auditoria. Si el autor
   avisa de algo, **se borra tambien su mensaje** del chat cuando pasan las 8 horas (si la API de
   Telegram lo permite).
+
+## Humor negro (regla del autor, 19-nov-2026)
+
+- El bot tiene la skill `humor-negro` (en todos los perfiles): tono seco, una broma por
+  mensaje y las lineas rojas estan en la propia skill (nada de personas reales, nada de
+  mayusculas, nada de remates suicidas).
+- Se usa solo cuando el autor lo pide o cuando el tono del hilo lo admite. Si el autor esta
+  en tono serio, no se mete humor negro aunque se sepa.

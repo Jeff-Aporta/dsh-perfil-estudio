@@ -1,5 +1,15 @@
 utf8
 
+## 19-nov-2026 - skill `humor-negro` en todos los perfiles
+
+- Nueva skill `humor-negro` (skills/humor-negro/SKILL.md, copiada a `perfiles/*/skills/humor-negro/`):
+  ocho estructuras que funcionan, banco con contexto de programacion, banco suave de produccion,
+  lineas rojas (nada de personas reales, nada de mayusculas, nada de remates suicidas) y la
+  prueba de la linea antes de mandarla.
+- Nuevo apartado "Humor negro" en `PERFIL-TG.md` (raiz y copias de `perfiles/*/`): se usa solo
+  cuando el autor lo pide o cuando el tono del hilo lo admite.
+- Peticion del autor por el canal (traslado del bot del PC, 19-nov-2026).
+
 ## 19-nov-2026 - skill `jerga-colombiana` en el perfil `dsh-telegram`
 
 - Nueva skill `jerga-colombiana` (perfiles/dsh-telegram/skills/jerga-colombiana/SKILL.md):
