@@ -1,5 +1,30 @@
 utf8
 
+## 19-nov-2026 - el grafo del codigo (codebase-memory-mcp) y la skill `cache`
+
+- **Grafo del codigo**: los 7 perfiles (`perfiles/*/cordis.patch.yml`) montan ahora el servidor
+  MCP local `codebase-memory-mcp` con el plugin `@deepseek-ai/dsh-mcp-client` (id `mcp-codebase`,
+  `serverName: codebase`). El agente dispone de las 17 herramientas `mcp__codebase__*`
+  (`search_graph`, `trace_path`, `get_architecture`, `query_graph`, `get_code_snippet`,
+  `search_code`, `index_status`...) para tener contexto estructural del repo sin leer fichero a
+  fichero. Es local, sin red y sin cuota; si el binario no esta, el perfil **arranca igual**
+  (`failOnStartupError: false`).
+- El indice vive en `~/.cache/codebase-memory-mcp` (`CBM_CACHE_DIR`, resuelto por la config del
+  perfil para que sea el mismo camino en PC y VPS). En el VPS queda indexado
+  `/opt/estudio-videos-repo` (94.061 nodos / 286.865 aristas), `/opt/dsh-perfil-estudio`,
+  `/opt/datos/jeff-aporta-repo` y `/opt/datos/portafolio`.
+- Para indexar: `CBM_CACHE_DIR=~/.cache/codebase-memory-mcp codebase-memory-mcp cli index_repository
+  --repo-path <ruta>` (el modo `moderate`/`fast` es mas rapido; `--async` deja el index en
+  segundo plano).
+- **Skill `cache`** (nueva, en `skills/cache/SKILL.md` y copiada a `perfiles/*/skills/cache/`): la
+  clave de un cache es el **hash sha256 del contenido** que lo produce, el valor se guarda en
+  **SQL (SQLite, con el patron DER del repo, nunca SQL crudo)** o en **Redis** (solo si hay que
+  compartir la cache entre nodos y el autor lo pide). Todo cache tiene TTL, no se cachean
+  secretos y un purge de cache no borra trabajo.
+- Nuevo apartado "Manejo de cache (por hash)" en `perfiles/*/definiciones.md` y en `PERFIL-TG.md`
+  (raiz y copias), que van en el prompt de cada sesion.
+- Peticion del autor en el tema general (19-nov-2026).
+
 ## 19-nov-2026 - confirmar antes de cualquier accion destructiva
 
 - `PERFIL-TG.md` (raiz y copias de `perfiles/*/`): nueva regla del autor. Antes de borrar o

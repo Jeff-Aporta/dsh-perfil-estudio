@@ -17,7 +17,7 @@ comportan **exactamente igual** y las actualizaciones se hacen con **pull + push
 | `PERFIL-TG.md` | El **canonico**: el comportamiento comun (idioma, reglas del estudio, la mente colmena). Se copia dentro de cada perfil. |
 | `MENTE-COLMENA.md` | La guia completa del protocolo de coordinacion entre bots. |
 | `perfiles/<nombre>/` | Un perfil: `perfil.yml`, `definiciones.md`, `PERFIL-TG.md`, `cordis.yml`, `cordis.patch.yml`, `package.json`, `pnpm-workspace.yaml`, `skills/<skill>/SKILL.md`. |
-| `skills/` | Las skills canonicas (grilling, trazabilidad-chat, adaptacion-entorno, canal, mente-colmena). |
+| `skills/` | Las skills canonicas (grilling, trazabilidad-chat, adaptacion-entorno, canal, mente-colmena, humor-negro, jerga-colombiana, cache). |
 | `plugin/` | **El plugin de DSH** (`dsh-estudio-plugin`): inyecta el perfil en cada sesion y registra las herramientas del protocolo. |
 | `install.sh` / `install.ps1` | Instalan (o reinstalan) todos los perfiles en esta maquina. |
 | `actualizar.sh` / `actualizar.ps1` | Pull + reinstalacion + reinicio del bot + aviso en el canal. |
@@ -140,6 +140,23 @@ Ademas, cada maquina lo hace **solo cada 15 minutos**:
 - **VPS**: `bash sistema/instalar-systemd.sh` (timer `dsh-perfil-actualizar.timer`).
 - **PC**: `powershell -NoProfile -ExecutionPolicy Bypass -File windows\instalar-tarea.ps1`
   (tarea programada `DSH-Perfil-Actualizar`).
+
+## El grafo del codigo (`codebase-memory-mcp`)
+
+Los perfiles montan un **servidor MCP local** que indexa los repos del nodo en un **grafo de
+nodos y aristas** (funciones, clases, llamadas, rutas HTTP). El agente lo consulta con las 17
+herramientas `mcp__codebase__*` (`search_graph`, `trace_path`, `get_architecture`, `query_graph`,
+`get_code_snippet`, `search_code`, `index_status`...) y tiene contexto estructural del repo sin
+leer fichero a fichero.
+
+- **Instalacion en el nodo**: `npm install -g codebase-memory-mcp` (Node >= 18; descarga el
+  runtime nativo). Es **opcional**: si el binario no esta, el perfil arranca igual y el agente
+  trabaja con las herramientas normales (`failOnStartupError: false`).
+- **Cache del indice**: `~/.cache/codebase-memory-mcp` (variable `CBM_CACHE_DIR`). La resuelve la
+  config del perfil, asi que es el mismo camino en el PC y en el VPS.
+- **Indexar un repo**: `codebase-memory-mcp cli index_repository --repo-path <ruta>` (modos
+  `full`, `moderate`, `fast`; `--async` lo deja en segundo plano).
+- Es **local**: no sale nada del nodo, **no cuesta cuota** y no necesita claves.
 
 ## Verificar (hash a hash)
 

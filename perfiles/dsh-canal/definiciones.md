@@ -65,3 +65,13 @@ El codigo esta en `canal/bot/colmena.mjs` (igual en el PC y en el VPS) y las pru
 - `CANAL_BOT`, `CANAL_NODO`, `CANAL_ROL`: quien soy, donde estoy y que rol tengo.
 
 El cliente ya esta hecho: `canal/cliente/canal.mjs` (firmar el token, publicar, listar, escuchar, subir y bajar).
+
+## Manejo de cache (por hash)
+
+- Hay una skill `cache` en este perfil: la clave es el **hash (sha256) del contenido** y el valor
+  va en **SQL (SQLite, con el patron DER del repo, nunca SQL crudo)** o en **Redis** (solo si hay
+  que compartir la cache entre nodos y el autor lo pide).
+- **Todo cache tiene TTL**; si el contenido cambia, el hash cambia y la entrada vieja no se usa.
+  No se cachean secretos. Un purge de cache **no borra trabajo**: solo filas de cache, y se anota.
+- El grafo del codigo ya es una cache de contexto: `mcp__codebase__search_graph`,
+  `mcp__codebase__trace_path`, `mcp__codebase__get_architecture`, `mcp__codebase__query_graph`.

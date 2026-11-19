@@ -74,3 +74,19 @@
       name: "dsh-estudio-plugin"
       config:
         perfil: dsh-telegram-respaldo
+
+# El GRAFO DEL CODIGO (codebase-memory-mcp): nodos y aristas del repo para que los agentes
+# tengan contexto estructural sin leer fichero a fichero (herramientas mcp__codebase__*).
+# Local, sin red y sin cuota: si el servidor MCP no esta, el perfil arranca igual.
+- insert:
+    - id: mcp-codebase
+      name: "@deepseek-ai/dsh-mcp-client"
+      config:
+        serverName: codebase
+        transport: stdio
+        command: codebase-memory-mcp
+        args: []
+        env:
+          CBM_CACHE_DIR: !!js "process.env.CBM_CACHE_DIR || ((process.env.HOME || process.env.USERPROFILE || '/root') + '/.cache/codebase-memory-mcp')"
+        toolCallTimeoutMs: 120000
+        failOnStartupError: false

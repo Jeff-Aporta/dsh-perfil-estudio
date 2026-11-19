@@ -425,3 +425,25 @@ Detalle: `POLITICA-COMUNICACION.md`. El idioma de todo el sistema es el espanol.
   mayusculas, nada de remates suicidas).
 - Se usa solo cuando el autor lo pide o cuando el tono del hilo lo admite. Si el autor esta
   en tono serio, no se mete humor negro aunque se sepa.
+
+## El GRAFO DEL CODIGO (codebase-memory-mcp, 19-nov-2026)
+
+- El perfil trae un **servidor MCP local** (`codebase-memory-mcp`) que indexa los repos del nodo
+  en un **grafo de nodos y aristas** (funciones, clases, llamadas, rutas HTTP). El agente lo
+  consulta con las herramientas `mcp__codebase__*`: `search_graph`, `trace_path`,
+  `get_architecture`, `query_graph`, `get_code_snippet`, `search_code`, `index_status`.
+- **Para que sirve**: dar contexto estructural sin leer fichero a fichero (el indice responde en
+  milisegundos y ahorra tokens). Se indexa una vez y se reindexa cuando cambian los ficheros.
+- Es **local**: no sale nada del nodo, **no cuesta cuota** y no necesita claves de ninguna API.
+- El indice vive en `~/.cache/codebase-memory-mcp` (`CBM_CACHE_DIR`). Para reindexar un repo:
+  `codebase-memory-mcp cli index_repository --repo-path <ruta>` (con `CBM_CACHE_DIR` puesto).
+- Si el MCP no esta instalado en el nodo, el perfil **arranca igual** (el servidor MCP no es
+  critico) y el agente trabaja con las herramientas normales.
+
+## Manejo de CACHE (por hash, SQL o Redis, 19-nov-2026)
+
+- El perfil tiene la skill `cache`: la clave de un cache es el **hash (sha256) del contenido que
+  lo produce**, el valor se guarda en **SQL (SQLite, con el patron DER del repo, nunca SQL crudo)**
+  o en **Redis** (solo si hay que compartir la cache entre nodos y el autor lo pide).
+- **Todo cache tiene TTL** y se invalida solo cuando cambia el hash. No se cachean secretos y un
+  purge de cache **no borra trabajo**: solo filas de cache, y se anota en el log y en el MD.
