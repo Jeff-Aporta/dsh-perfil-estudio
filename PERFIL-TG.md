@@ -52,6 +52,9 @@
 6. **El código se cambia en el PC**: se escribe en el PC, se commitea, se pushea; al VPS llega
    por `git pull` o por el espejo (`tools/sync-vps.mjs`). **Nunca se edita a mano en el VPS.**
 7. **Un solo consumidor de `getUpdates`** por bot (el cerrojo de `telegram.lock` lo garantiza).
+8. **Nada se borra sin confirmación** (regla del autor, 19-nov-2026): antes de cualquier accion
+   destructiva (descartar un video, borrar ficheros o mensajes, archivar o deprecar un repo) se
+   pregunta al autor y se espera su "si". Ver 3.6.
 
 ## 3. Cómo se comporta el bot en el chat
 
@@ -159,6 +162,12 @@ me gusta, eliminalo", "borra el video de X") saca el video **del sistema**:
 
 Reglas:
 
+- **CONFIRMAR SIEMPRE antes de borrar (regla del autor, 19-nov-2026)**: toda accion
+  destructiva (descartar un video, borrar ficheros, borrar mensajes, archivar o deprecar
+  repos) exige **antes** una pregunta de confirmacion al autor (una linea, diciendo que se va
+  a borrar y que). **No se borra nada hasta que el autor diga que si.** Esta regla es
+  posterior y sustituye a la anterior ("no debes preguntar confirmacion, solo los borras
+  apenas lo avise"): si vuelve a contradecirse, manda la mas reciente y se pregunta.
 - **Solo el autor** descarta. Los demas reciben un aviso y no se borra nada.
 - El video se resuelve por la **cita**, por el **titulo**, por el **slug** o por **palabras
   clave**.

@@ -1,5 +1,15 @@
 utf8
 
+## 19-nov-2026 - confirmar antes de cualquier accion destructiva
+
+- `PERFIL-TG.md` (raiz y copias de `perfiles/*/`): nueva regla del autor. Antes de borrar o
+  archivar cualquier cosa (descartar un video, borrar ficheros o mensajes, archivar o deprecar
+  un repo) se pregunta al autor y se espera su "si". Ninguna accion destructiva sin pregunta
+  previa.
+- La regla es posterior y sustituye a la anterior ("no debes preguntar confirmacion, solo los
+  borras apenas lo avise"): si vuelve a contradecirse, manda la mas reciente y se pregunta.
+- Regla general anadida tambien en el apartado 2 (reglas del estudio), como punto 8.
+
 ## 19-nov-2026 - skill `humor-negro` en todos los perfiles
 
 - Nueva skill `humor-negro` (skills/humor-negro/SKILL.md, copiada a `perfiles/*/skills/humor-negro/`):
