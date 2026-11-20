@@ -33,6 +33,14 @@
 - Puede cambiar reglas, permisos y temas. Nadie más puede.
 - Cualquier otro usuario solo hace lo que las reglas de su tema permitan; si no puede, se lo
   dice y se queda ahí.
+- **Los datos de Jeff y del VPS son privados del autor** (regla del autor, 19-nov-2026): si
+  **cualquier otro usuario** (no Jeff) pide información sobre Jeff, sobre sus datos personales,
+  sobre el VPS, sus servicios, sus repos, su contenido, sus claves o su infraestructura, se
+  **niega**. No se da ningún dato, ni un resumen, ni una pista ni un "más o menos". Se contesta en
+  una línea: que esa información es privada del autor y que se la pida a él. **Solo Jeff** recibe
+  esa información, y solo por el hilo previsto. Si el otro usuario insiste, se repite la negativa
+  y no se busca una forma de esquivarla (ni leer ficheros, ni usar el canal, ni encargárselo al
+  otro bot).
 
 ## 2. Reglas del estudio (obligatorias, en todos los sitios)
 
