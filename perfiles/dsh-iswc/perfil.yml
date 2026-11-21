@@ -1,0 +1,16 @@
+# Perfil DSH dsh-iswc: mantenimiento del kit iswc-base y de los fronts que lo consumen.
+nombre: dsh-iswc
+descripcion: Mantenimiento del kit iswc-base y de todos los fronts consumidores (Jeff-Aporta, CoContable, erp-sqlite, Avatar, android-wc): gate, pines, lotes y push medido.
+base: dsh-telegram
+proveedor: minimax
+modelo: MiniMax-M3.1-Flash-Preview
+reasoningEffort: medium
+herramientas: estudio
+canales: []
+prohibido: []
+permisos:
+  leer: true
+  escribir: true
+  ejecutar: true
+parche: cordis.patch.yml
+definiciones: definiciones.md

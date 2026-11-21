@@ -1,0 +1,106 @@
+# Perfil dsh-iswc: mantenimiento del kit iswc-base y de sus consumidores.
+# Se instala en ~/.dsh/profiles/dsh-iswc con install.ps1 (PC) o install.sh (VPS).
+- id: agent-default-model
+  name: "@deepseek-ai/dsh-agent-default-model"
+  config:
+    provider: minimax
+    model: MiniMax-M3.1-Flash-Preview
+    reasoningEffort: medium
+- id: permission
+  name: "@deepseek-ai/dsh-permission-presets"
+  config:
+    presets:
+      read-only:
+        sandbox: read-only
+        approval: ask
+      workspace-write:
+        sandbox: workspace-write
+        approval: ask
+      danger-full-access:
+        sandbox: danger-full-access
+        approval: never
+    defaultPreset: danger-full-access
+# Las skills del perfil (skills/): mantenimiento del kit, de los consumidores, de la carga,
+# del typecheck, de la a11y y de la verificacion.
+- id: skill-filesystem
+  name: "@deepseek-ai/dsh-skill-filesystem"
+  config:
+    customSkillDirs:
+      - "skills"
+- id: llm-deepseek
+  name: "@deepseek-ai/dsh-llm-deepseek-api-key"
+  config:
+    apiKeyEnv: DEEPSEEK_API_KEY
+    thinking: disabled
+    reasoningEffort: off
+    maxTokens: 8192
+    models:
+      - id: deepseek-flash
+        name: DeepSeek-V4.1-Flash
+        contextWindow: 1048576
+        maxTokens: 393216
+        inputModalities:
+          - text
+          - image
+- id: llm-pi-ai
+  name: "@deepseek-ai/dsh-llm-pi-ai"
+  config:
+    providers:
+      minimax:
+        displayName: MiniMax
+        apiKeyEnv: MINIMAX_2_API_KEY
+        api: openai-completions
+        baseURL: https://api.minimax.io/v1
+        reasoning: low
+        models:
+          - id: MiniMax-M3.1-Flash-Preview
+            name: MiniMax M3.1 Flash Preview
+            contextWindow: 1000000
+            maxTokens: 512000
+            input:
+              - text
+              - image
+            reasoningEfforts:
+              low: low
+              medium: medium
+              high: high
+              xhigh: xhigh
+              max: max
+          - id: MiniMax-M3
+            name: MiniMax M3
+            contextWindow: 1000000
+            maxTokens: 512000
+            input:
+              - text
+              - image
+            reasoningEfforts:
+              low: low
+              medium: medium
+              high: high
+              xhigh: xhigh
+              max: max
+
+# El GRAFO DEL CODIGO (codebase-memory-mcp): nodos y aristas del repo para que los agentes
+# tengan contexto estructural sin leer fichero a fichero (herramientas mcp__codebase__*).
+# El servidor es local: no sale nada del nodo y no cuesta cuota.
+- insert:
+    - id: mcp-codebase
+      name: "@deepseek-ai/dsh-mcp-client"
+      config:
+        serverName: codebase
+        transport: stdio
+        command: codebase-memory-mcp
+        args: []
+        env:
+          CBM_CACHE_DIR: !!js "process.env.CBM_CACHE_DIR || ((process.env.HOME || process.env.USERPROFILE || '/root') + '/.cache/codebase-memory-mcp')"
+        toolCallTimeoutMs: 120000
+        failOnStartupError: false
+
+# El plugin del perfil: inyecta las definiciones de este perfil en cada sesion
+# y registra las herramientas del canal y del WIP compartido.
+- insert:
+    - id: estudio
+      name: "dsh-estudio-plugin"
+      config:
+        perfil: dsh-iswc
+        failOnStartupError: false
