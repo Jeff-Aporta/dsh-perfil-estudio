@@ -96,9 +96,13 @@ foreach ($dir in Get-ChildItem -Directory (Join-Path $Repo "perfiles")) {
   # El plugin: pnpm (o el runtime de DSH, que trae pnpm).
   if ($Pnpm -eq "dsh") {
     $dshCmd = Join-Path $env:LOCALAPPDATA "Programs\DeepSeek Harness\resources\runtime\cli\bin\dsh.cmd"
+    # pnpm escribe avisos por stderr aunque todo vaya bien: con ErrorActionPreference=Stop eso
+    # abortaba el instalador en el primer perfil. aqui se mira el codigo de salida, no el ruido.
+    $ErrorActionPreference = "Continue"
     & $dshCmd plugin --profile $nombre install 2>&1 | Out-Null
     if ($LASTEXITCODE -ne 0) { & $dshCmd plugin --profile $nombre install; $errores = 1 }
     & $dshCmd plugin --profile $nombre update dsh-estudio-plugin --latest 2>&1 | Out-Null
+    $ErrorActionPreference = "Stop"
   } else {
     Push-Location $dest
     try {
