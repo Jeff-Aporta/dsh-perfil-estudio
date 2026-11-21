@@ -22,6 +22,7 @@ comportan **exactamente igual** y las actualizaciones se hacen con **pull + push
 | `install.sh` / `install.ps1` | Instalan (o reinstalan) todos los perfiles en esta maquina. |
 | `actualizar.sh` / `actualizar.ps1` | Pull + reinstalacion + reinicio del bot + aviso en el canal. |
 | `verificar-paridad.mjs` | Comprueba hash a hash que repo, PC y VPS tienen lo mismo. |
+| `tools/instalar-codebase-memory.sh` / `.ps1` | Instalan el binario del **grafo del codigo** (`codebase-memory-mcp`) con verificacion de checksum. |
 | `sistema/` | Las units de systemd (timer de 15 minutos) y su instalador. |
 | `windows/` | La tarea programada de Windows (cada 15 minutos) y su instalador. |
 
@@ -36,6 +37,42 @@ comportan **exactamente igual** y las actualizaciones se hacen con **pull + push
 | `dsh-telegram-privado` | Solo conversa (chat privado del autor). |
 | `dsh-telegram-respaldo` | **Reserva** del chat: el perfil base con DeepSeek. Entra solo si MiniMax se queda sin cupo. |
 | `dsh-canal` | El canal entre bots (D1 + Realtime + API + R2). |
+
+## El grafo del codigo (codebase-memory-mcp)
+
+Los perfiles montan un **servidor MCP local** (`mcp-codebase`) que da a los agentes un
+**grafo del codigo**: que simbolo llama a cual, donde esta definido, que depende de
+que. Con el grafo, el agente pregunta una vez y recibe la cadena de llamadas, en vez
+de buscar con `grep` por los ficheros.
+
+- **17 herramientas** (`mcp__codebase__*`): buscar simbolos, trazar rutas de llamada,
+  ver el fuente de un simbolo, la arquitectura de un directorio, el estado de cada
+  indice y el texto literal de una llamada.
+- Es **local**: no sale nada del nodo y no cuesta cuota. Si el binario no esta, el
+  perfil **arranca igual** (`failOnStartupError: false`) pero se queda **sin grafo**.
+- **El binario es una dependencia aparte**: los perfiles lo montan, pero no lo instalan.
+
+```bash
+# VPS
+bash tools/instalar-codebase-memory.sh
+# PC (PowerShell)
+powershell -NoProfile -ExecutionPolicy Bypass -File tools/instalar-codebase-memory.ps1
+```
+
+El script baja el release oficial de `DeusData/codebase-memory-mcp`, **verifica el
+SHA256 contra el `checksums.txt` del mismo release** y lo deja en `~/.local/bin`.
+
+**Indexar un repo** (el plugin consulta; el indice se crea a mano):
+
+```bash
+codebase-memory-mcp cli --quiet index_repository '{"repo_path":"/ruta/absoluta"}'
+codebase-memory-mcp cli --quiet list_projects
+```
+
+El indice respeta el `.gitignore` (los secretos no se indexan) y el `.cbmignore` del
+repo (lo que se quiere dejar fuera). En el **arbol vivo del VPS** hay que indexar un
+**snapshot** (`/opt/cbm-snapshot/estudio-videos`): el arbol cambia mientras se lee y
+la indexacion se aborta para no publicar un indice a medias.
 
 ## El perfil de respaldo (`dsh-telegram-respaldo`)
 
